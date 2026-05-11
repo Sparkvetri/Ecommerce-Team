@@ -1,6 +1,7 @@
  import React from 'react'
 import Navbar from './Thiru/Navbar'
-import NewArrival from './NewArrival';
+import NewArrival from './Thiru/NewArrival';
+import Footer from './Thiru/Footer';
  
  const App = () => {
    return (
@@ -8,6 +9,7 @@ import NewArrival from './NewArrival';
        App
        <Navbar/>
        <NewArrival />
+       <Footer/>
      </div>
    )
  }
