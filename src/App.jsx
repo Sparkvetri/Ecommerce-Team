@@ -3,7 +3,7 @@
  const App = () => {
    return (
      <div>
-       App
+       App .js
      </div>
    )
  }
