@@ -1,12 +1,7 @@
- import React from 'react'
- 
- const App = () => {
-   return (
-     <div>
-       App
-     </div>
-   )
- }
- 
- export default App
- 
+import FlashSale from "./components/FlashSale";
+
+function App() {
+  return <FlashSale />;
+}
+
+export default App;
