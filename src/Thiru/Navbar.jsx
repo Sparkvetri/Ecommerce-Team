@@ -23,7 +23,7 @@ export default function Navbar() {
           
           {/* Logo */}
           <h1 className="text-2xl font-bold tracking-wide">
-            Exclusive
+            Shopzy
           </h1>
 
           {/* Nav Links */}
