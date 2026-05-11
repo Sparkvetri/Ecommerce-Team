@@ -3,13 +3,17 @@ import Navbar from './Lifla/Navbar'
 import Category from './Lifla/Category'
 import Selling from './Lifla/Selling'
 import MusicBanner from './Lifla/MusicBanner'
+import ProductDetails from './Lifla/ProductDetails'
+import RelatedItems from './Lifla/RelatedItems'
 const App = () => {
    return (
      <div>
-       <Navbar/>
+       {/* <Navbar/>
        <Category/>
        <Selling/>
-       <MusicBanner/>
+       <MusicBanner/> */}
+       <ProductDetails/>
+       <RelatedItems/>
      </div>
    )
  }
