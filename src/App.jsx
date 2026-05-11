@@ -1,9 +1,9 @@
  import React from 'react'
- 
+ import Navbar from './Lifla/Navbar'
  const App = () => {
    return (
      <div>
-       App .js
+       <Navbar/>
      </div>
    )
  }
