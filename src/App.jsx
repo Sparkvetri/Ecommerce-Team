@@ -1,4 +1,4 @@
-HEAD
+import React from 'react';
 import FlashSale from "./components/FlashSale";
 
 function App() {
@@ -6,17 +6,3 @@ function App() {
 }
 
 export default App;
-
- import React from 'react'
- 
- const App = () => {
-   return (
-     <div>
-       App .js
-     </div>
-   )
- }
- 
- export default App
- 
-
