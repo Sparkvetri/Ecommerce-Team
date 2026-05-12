@@ -1,6 +1,6 @@
 // App.jsx
 import React, { useEffect, useState } from "react";
-import { ChevronRight, ChevronLeft } from "lucide-react";
+import { ChevronRight, ChevronLeft, Menu } from "lucide-react";
 
 const categories = [
   "Woman’s Fashion",
@@ -49,8 +49,9 @@ const banners = [
 
 export default function App() {
   const [current, setCurrent] = useState(0);
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  // Auto slide
+  // Auto Slide
   useEffect(() => {
     const interval = setInterval(() => {
       nextSlide();
@@ -70,26 +71,47 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-10">
-      <div className="flex w-[1150px] gap-6">
+    <div className="min-h-screen bg-gray-100 p-4 md:p-8">
+      
+      {/* Mobile Menu Button */}
+      <div className="md:hidden flex justify-between items-center mb-4">
+        <h1 className="text-2xl font-bold">Shop</h1>
+
+        <button
+          onClick={() => setMenuOpen(!menuOpen)}
+          className="bg-black text-white p-2 rounded"
+        >
+          <Menu size={22} />
+        </button>
+      </div>
+
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-5">
         
         {/* Sidebar */}
-        <aside className="w-[260px] bg-white rounded-md py-4 shadow-sm">
+        <aside
+          className={`
+            bg-white rounded-md shadow-sm
+            md:w-[260px] w-full
+            ${menuOpen ? "block" : "hidden"}
+            md:block
+          `}
+        >
           {categories.map((item, index) => (
             <div
               key={index}
-              className="flex items-center justify-between px-6 py-3 hover:bg-gray-100 cursor-pointer transition"
+              className="flex items-center justify-between px-5 py-3 hover:bg-gray-100 cursor-pointer transition"
             >
-              <span className="text-[15px] font-medium">
+              <span className="text-sm md:text-[15px] font-medium">
                 {item}
               </span>
+
               <ChevronRight size={16} />
             </div>
           ))}
         </aside>
 
         {/* Carousel */}
-        <div className="relative flex-1 h-[380px] overflow-hidden rounded-md bg-black">
+        <div className="relative flex-1 overflow-hidden rounded-md bg-black h-[520px] md:h-[420px]">
           
           {/* Slides */}
           <div
@@ -101,26 +123,36 @@ export default function App() {
             {banners.map((banner, index) => (
               <div
                 key={index}
-                className="min-w-full h-full flex items-center justify-between px-14"
+                className="
+                  min-w-full h-full
+                  flex flex-col-reverse md:flex-row
+                  items-center justify-center
+                  px-6 md:px-14
+                  py-8
+                  gap-8
+                "
               >
+                
                 {/* Left Content */}
-                <div className="text-white z-10">
-                  <div className="flex items-center gap-3 mb-6">
+                <div className="text-white text-center md:text-left">
+                  
+                  <div className="flex items-center justify-center md:justify-start gap-3 mb-4">
                     <img
                       src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg"
                       alt="Apple"
-                      className="w-8 invert"
+                      className="w-7 invert"
                     />
+
                     <span className="text-sm">
                       {banner.subtitle}
                     </span>
                   </div>
 
-                  <h1 className="text-5xl font-bold leading-tight mb-8 max-w-[350px]">
+                  <h1 className="text-3xl md:text-5xl font-bold leading-tight mb-6 max-w-[350px]">
                     {banner.title}
                   </h1>
 
-                  <button className="border-b border-white pb-1 text-lg hover:text-gray-300 transition">
+                  <button className="border-b border-white pb-1 text-base md:text-lg hover:text-gray-300 transition">
                     Shop Now →
                   </button>
                 </div>
@@ -128,8 +160,13 @@ export default function App() {
                 {/* Image */}
                 <img
                   src={banner.image}
-                  alt=""
-                  className="w-[420px] h-[300px] object-contain"
+                  alt={banner.title}
+                  className="
+                    w-full max-w-[280px]
+                    md:max-w-[420px]
+                    h-[220px] md:h-[300px]
+                    object-contain
+                  "
                 />
               </div>
             ))}
@@ -138,21 +175,33 @@ export default function App() {
           {/* Left Arrow */}
           <button
             onClick={prevSlide}
-            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 text-white p-3 rounded-full backdrop-blur-sm transition"
+            className="
+              absolute left-2 md:left-4 top-1/2
+              -translate-y-1/2
+              bg-white/20 hover:bg-white/40
+              text-white p-2 md:p-3
+              rounded-full backdrop-blur-sm transition
+            "
           >
-            <ChevronLeft size={24} />
+            <ChevronLeft size={22} />
           </button>
 
           {/* Right Arrow */}
           <button
             onClick={nextSlide}
-            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 text-white p-3 rounded-full backdrop-blur-sm transition"
+            className="
+              absolute right-2 md:right-4 top-1/2
+              -translate-y-1/2
+              bg-white/20 hover:bg-white/40
+              text-white p-2 md:p-3
+              rounded-full backdrop-blur-sm transition
+            "
           >
-            <ChevronRight size={24} />
+            <ChevronRight size={22} />
           </button>
 
           {/* Dots */}
-          <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex gap-2">
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
             {banners.map((_, index) => (
               <button
                 key={index}

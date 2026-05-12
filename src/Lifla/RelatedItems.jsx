@@ -46,60 +46,93 @@ const products = [
 
 const RelatedItems = () => {
   return (
-    <div className="min-h-screen bg-gray-100 px-6 md:px-16 py-16">
+    <div className="min-h-screen bg-gray-100 px-4 sm:px-6 md:px-10 lg:px-16 py-10 md:py-16">
+      
       {/* Heading */}
-      <div className="flex items-center gap-3 mb-10">
-        <div className="w-4 h-8 bg-red-500 rounded-sm"></div>
-        <h2 className="text-red-500 font-semibold text-lg">
+      <div className="flex items-center gap-3 mb-8 md:mb-10">
+        
+        <div className="w-3 h-7 md:w-4 md:h-8 bg-red-500 rounded-sm"></div>
+
+        <h2 className="text-red-500 font-semibold text-base sm:text-lg md:text-xl">
           Related Item
         </h2>
       </div>
 
       {/* Product Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
         {products.map((product) => (
-          <div key={product.id} className="group">
+          <div
+            key={product.id}
+            className="group"
+          >
+            
             {/* Product Card */}
-            <div className="bg-white rounded-md p-4 relative overflow-hidden">
+            <div className="bg-white rounded-xl p-4 relative overflow-hidden shadow-sm hover:shadow-md transition">
               
-              {/* Discount */}
+              {/* Discount Badge */}
               <span className="absolute top-4 left-4 bg-red-500 text-white text-xs px-2 py-1 rounded">
                 {product.discount}
               </span>
 
               {/* Icons */}
-              <div className="absolute top-4 right-4 flex flex-col gap-2">
-                <button className="bg-white p-1.5 rounded-full shadow hover:bg-gray-100">
+              <div className="absolute top-4 right-4 flex flex-col gap-2 z-10">
+                
+                {/* Wishlist */}
+                <button className="bg-white p-2 rounded-full shadow hover:bg-gray-100 transition">
                   <Heart size={16} />
                 </button>
 
-                <button className="bg-white p-1.5 rounded-full shadow hover:bg-gray-100">
+                {/* View */}
+                <button className="bg-white p-2 rounded-full shadow hover:bg-gray-100 transition">
                   <Eye size={16} />
                 </button>
               </div>
 
-              {/* Image */}
-              <div className="h-48 flex items-center justify-center">
+              {/* Product Image */}
+              <div className="h-44 sm:h-48 flex items-center justify-center">
                 <img
                   src={product.image}
                   alt={product.title}
-                  className="h-36 object-contain group-hover:scale-105 transition duration-300"
+                  className="
+                    h-32 sm:h-36
+                    object-contain
+                    group-hover:scale-105
+                    transition duration-300
+                  "
                 />
               </div>
 
-              {/* Add to Cart Button */}
-              <button className="w-full bg-black text-white py-3 rounded mt-4 opacity-0 group-hover:opacity-100 transition duration-300">
+              {/* Add To Cart */}
+              <button
+                className="
+                  w-full
+                  bg-black
+                  text-white
+                  py-3
+                  rounded-md
+                  mt-4
+                  opacity-100
+                  sm:opacity-0
+                  sm:group-hover:opacity-100
+                  transition duration-300
+                  text-sm sm:text-base
+                "
+              >
                 Add To Cart
               </button>
             </div>
 
             {/* Product Info */}
             <div className="mt-4">
-              <h3 className="font-medium text-sm mb-2">
+              
+              {/* Title */}
+              <h3 className="font-medium text-sm sm:text-base mb-2 line-clamp-2">
                 {product.title}
               </h3>
 
-              <div className="flex items-center gap-2 text-sm">
+              {/* Price */}
+              <div className="flex items-center gap-2 text-sm flex-wrap">
+                
                 <span className="text-red-500 font-semibold">
                   {product.price}
                 </span>
@@ -110,7 +143,8 @@ const RelatedItems = () => {
               </div>
 
               {/* Rating */}
-              <div className="flex items-center gap-2 mt-2">
+              <div className="flex items-center gap-2 mt-2 flex-wrap">
+                
                 <div className="text-yellow-400 text-sm">
                   ★★★★★
                 </div>

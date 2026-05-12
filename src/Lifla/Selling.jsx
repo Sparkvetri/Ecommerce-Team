@@ -49,22 +49,27 @@ const products = [
 
 export default function BestSellingProducts() {
   return (
-    <section className="w-full bg-[#f6f6f6] py-14 px-6 md:px-12">
+    <section className="w-full bg-[#f6f6f6] py-10 md:py-14 px-4 sm:px-6 md:px-12">
+      
       {/* Top Label */}
       <div className="flex items-center gap-3 mb-4">
-        <div className="w-2 h-8 bg-red-500 rounded-full"></div>
-        <span className="text-red-500 font-semibold text-sm">
+        <div className="w-2 h-7 md:h-8 bg-red-500 rounded-full"></div>
+
+        <span className="text-red-500 font-semibold text-xs sm:text-sm">
           This Month
         </span>
       </div>
 
       {/* Heading */}
-      <div className="flex items-center justify-between mb-10">
-        <h2 className="text-4xl font-bold text-black">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5 mb-8 md:mb-10">
+        
+        {/* Title */}
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black">
           Best Selling Products
         </h2>
 
-        <button className="bg-red-500 hover:bg-red-600 text-white px-8 py-3 rounded-md font-medium transition">
+        {/* Button */}
+        <button className="bg-red-500 hover:bg-red-600 text-white px-6 md:px-8 py-2.5 md:py-3 rounded-md font-medium transition w-full sm:w-auto">
           View All
         </button>
       </div>
@@ -72,16 +77,23 @@ export default function BestSellingProducts() {
       {/* Product Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {products.map((product) => (
-          <div key={product.id}>
+          <div
+            key={product.id}
+            className="group"
+          >
+            
             {/* Image Card */}
-            <div className="relative bg-[#ececec] rounded-md h-[270px] flex items-center justify-center overflow-hidden group">
+            <div className="relative bg-[#ececec] rounded-xl h-[240px] sm:h-[260px] md:h-[270px] flex items-center justify-center overflow-hidden">
               
               {/* Icons */}
               <div className="absolute top-4 right-4 flex flex-col gap-3 z-10">
+                
+                {/* Wishlist */}
                 <button className="w-9 h-9 rounded-full bg-white flex items-center justify-center shadow hover:bg-red-500 hover:text-white transition">
                   <Heart size={18} />
                 </button>
 
+                {/* View */}
                 <button className="w-9 h-9 rounded-full bg-white flex items-center justify-center shadow hover:bg-red-500 hover:text-white transition">
                   <Eye size={18} />
                 </button>
@@ -91,31 +103,41 @@ export default function BestSellingProducts() {
               <img
                 src={product.image}
                 alt={product.name}
-                className="w-[180px] h-[180px] object-contain group-hover:scale-105 transition duration-300"
+                className="
+                  w-[150px] sm:w-[170px] md:w-[180px]
+                  h-[150px] sm:h-[170px] md:h-[180px]
+                  object-contain
+                  group-hover:scale-105
+                  transition duration-300
+                "
               />
             </div>
 
             {/* Product Info */}
             <div className="mt-4">
-              <h3 className="font-semibold text-lg text-black mb-2">
+              
+              {/* Product Name */}
+              <h3 className="font-semibold text-base sm:text-lg text-black mb-2 line-clamp-1">
                 {product.name}
               </h3>
 
               {/* Price */}
-              <div className="flex items-center gap-3 mb-2">
-                <span className="text-red-500 font-semibold">
+              <div className="flex items-center gap-3 mb-2 flex-wrap">
+                
+                <span className="text-red-500 font-semibold text-sm sm:text-base">
                   {product.price}
                 </span>
 
                 {product.oldPrice && (
-                  <span className="text-gray-400 line-through">
+                  <span className="text-gray-400 line-through text-sm sm:text-base">
                     {product.oldPrice}
                   </span>
                 )}
               </div>
 
               {/* Rating */}
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
+                
                 <div className="flex text-yellow-400">
                   {[...Array(5)].map((_, index) => (
                     <Star

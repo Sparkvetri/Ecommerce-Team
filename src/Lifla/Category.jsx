@@ -38,8 +38,6 @@ const categories = [
     name: "Gaming",
     icon: <Gamepad2 size={32} />,
   },
-
-  // New Categories
   {
     name: "Speakers",
     icon: <Speaker size={32} />,
@@ -72,26 +70,32 @@ export default function BrowseCategory() {
   );
 
   return (
-    <section className="w-full bg-[#f6f6f6] py-12 px-6 md:px-12">
+    <section className="w-full bg-[#f6f6f6] py-8 md:py-12 px-4 sm:px-6 md:px-12">
+      
       {/* Top Label */}
       <div className="flex items-center gap-3 mb-4">
-        <div className="w-2 h-8 bg-red-500 rounded-full"></div>
-        <span className="text-red-500 font-semibold text-sm">
+        <div className="w-2 h-7 md:h-8 bg-red-500 rounded-full"></div>
+
+        <span className="text-red-500 font-semibold text-xs sm:text-sm">
           Categories
         </span>
       </div>
 
       {/* Heading + Buttons */}
-      <div className="flex items-center justify-between mb-10">
-        <h2 className="text-4xl font-bold text-black">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5 mb-8 md:mb-10">
+        
+        {/* Heading */}
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black">
           Browse By Category
         </h2>
 
+        {/* Buttons */}
         <div className="flex items-center gap-3">
+          
           {/* Left Button */}
           <button
             onClick={handlePrev}
-            className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300 transition disabled:opacity-50"
+            className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300 transition disabled:opacity-50"
             disabled={startIndex === 0}
           >
             <ChevronLeft size={20} />
@@ -100,7 +104,7 @@ export default function BrowseCategory() {
           {/* Right Button */}
           <button
             onClick={handleNext}
-            className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300 transition disabled:opacity-50"
+            className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300 transition disabled:opacity-50"
             disabled={startIndex + itemsPerPage >= categories.length}
           >
             <ChevronRight size={20} />
@@ -108,26 +112,40 @@ export default function BrowseCategory() {
         </div>
       </div>
 
-      {/* Categories */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-5">
+      {/* Categories Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-5">
         {visibleCategories.map((item, index) => (
           <div
             key={index}
-            className={`border rounded-md h-36 flex flex-col items-center justify-center cursor-pointer transition-all duration-300
+            className={`
+              border rounded-xl
+              h-32 sm:h-36
+              flex flex-col items-center justify-center
+              cursor-pointer
+              transition-all duration-300
+              hover:scale-105
               ${
                 item.active
                   ? "bg-red-500 text-white border-red-500"
                   : "bg-white text-black border-gray-300 hover:border-red-400"
-              }`}
+              }
+            `}
           >
-            <div className="mb-3">{item.icon}</div>
-            <p className="font-medium">{item.name}</p>
+            {/* Icon */}
+            <div className="mb-3">
+              {item.icon}
+            </div>
+
+            {/* Text */}
+            <p className="font-medium text-sm sm:text-base text-center px-2">
+              {item.name}
+            </p>
           </div>
         ))}
       </div>
 
       {/* Bottom Divider */}
-      <div className="border-t border-gray-300 mt-12"></div>
+      <div className="border-t border-gray-300 mt-10 md:mt-12"></div>
     </section>
   );
 }

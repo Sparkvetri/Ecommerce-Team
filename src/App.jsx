@@ -8,10 +8,10 @@ import RelatedItems from './Lifla/RelatedItems'
 const App = () => {
    return (
      <div>
-       {/* <Navbar/>
+       <Navbar/>
        <Category/>
        <Selling/>
-       <MusicBanner/> */}
+       <MusicBanner/>
        <ProductDetails/>
        <RelatedItems/>
      </div>
