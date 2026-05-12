@@ -1,53 +1,13 @@
-import {
-  Heart,
-  Eye,
-  Star,
-} from "lucide-react";
-
-const products = [
-  {
-    id: 1,
-    name: "The north coat",
-    image:
-      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=800&auto=format&fit=crop",
-    price: "$260",
-    oldPrice: "$360",
-    rating: 5,
-    reviews: 65,
-  },
-  {
-    id: 2,
-    name: "Gucci duffle bag",
-    image:
-      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=800&auto=format&fit=crop",
-    price: "$960",
-    oldPrice: "$1160",
-    rating: 4,
-    reviews: 65,
-  },
-  {
-    id: 3,
-    name: "RGB liquid CPU Cooler",
-    image:
-      "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?q=80&w=800&auto=format&fit=crop",
-    price: "$160",
-    oldPrice: "$170",
-    rating: 4,
-    reviews: 65,
-  },
-  {
-    id: 4,
-    name: "Small BookSelf",
-    image:
-      "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=800&auto=format&fit=crop",
-    price: "$360",
-    oldPrice: "",
-    rating: 5,
-    reviews: 65,
-  },
-];
+import React from 'react';
+import { Heart, Eye, Star } from "lucide-react";
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 export default function BestSellingProducts() {
+  const allProducts = useSelector((state) => state.products.allProducts);
+  const products = allProducts.slice(4, 8); // Example best sellers
+  const navigate = useNavigate();
+
   return (
     <section className="w-full bg-[#f6f6f6] py-6 sm:py-8 md:py-12 lg:py-14 px-3 sm:px-6 md:px-10 lg:px-12">
       {/* Top Label */}
@@ -64,7 +24,10 @@ export default function BestSellingProducts() {
           Best Selling Products
         </h2>
 
-        <button className="bg-red-500 hover:bg-red-600 text-white px-6 sm:px-8 md:px-10 py-2 sm:py-2.5 md:py-3 rounded-md font-medium transition active:bg-red-700 text-sm sm:text-base w-full sm:w-auto">
+        <button 
+          onClick={() => navigate('/shop')}
+          className="bg-red-500 hover:bg-red-600 text-white px-6 sm:px-8 md:px-10 py-2 sm:py-2.5 md:py-3 rounded-md font-medium transition active:bg-red-700 text-sm sm:text-base w-full sm:w-auto"
+        >
           View All
         </button>
       </div>
@@ -72,17 +35,23 @@ export default function BestSellingProducts() {
       {/* Product Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
         {products.map((product) => (
-          <div key={product.id} className="group">
+          <div key={product.id} className="group cursor-pointer" onClick={() => navigate(`/product/${product.id}`)}>
             {/* Image Card */}
             <div className="relative bg-[#ececec] rounded-md aspect-square flex items-center justify-center overflow-hidden">
               
               {/* Icons */}
               <div className="absolute top-2 sm:top-3 right-2 sm:right-4 flex flex-col gap-2 sm:gap-3 z-10 opacity-0 sm:group-hover:opacity-100 transition-opacity">
-                <button className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-full bg-white flex items-center justify-center shadow hover:bg-red-500 hover:text-white transition active:scale-95">
+                <button 
+                  onClick={(e) => { e.stopPropagation(); /* Add to wishlist logic */ }}
+                  className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-full bg-white flex items-center justify-center shadow hover:bg-red-500 hover:text-white transition active:scale-95"
+                >
                   <Heart size={16} className="sm:w-5 sm:h-5" />
                 </button>
 
-                <button className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-full bg-white flex items-center justify-center shadow hover:bg-red-500 hover:text-white transition active:scale-95">
+                <button 
+                  onClick={(e) => { e.stopPropagation(); /* Add quick view logic */ }}
+                  className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-full bg-white flex items-center justify-center shadow hover:bg-red-500 hover:text-white transition active:scale-95"
+                >
                   <Eye size={16} className="sm:w-5 sm:h-5" />
                 </button>
               </div>
@@ -91,7 +60,7 @@ export default function BestSellingProducts() {
               <img
                 src={product.image}
                 alt={product.name}
-                className="w-[120px] sm:w-[150px] md:w-[180px] h-[120px] sm:h-[150px] md:h-[180px] object-contain group-hover:scale-105 transition duration-300"
+                className="w-[120px] sm:w-[150px] md:w-[180px] h-[120px] sm:h-[150px] md:h-[180px] object-cover group-hover:scale-105 transition duration-300"
               />
             </div>
 
@@ -104,12 +73,12 @@ export default function BestSellingProducts() {
               {/* Price */}
               <div className="flex items-center gap-2 sm:gap-3 mb-1.5 sm:mb-2 flex-wrap">
                 <span className="text-red-500 font-semibold text-sm sm:text-base">
-                  {product.price}
+                  ${product.price}
                 </span>
 
                 {product.oldPrice && (
                   <span className="text-gray-400 line-through text-xs sm:text-sm">
-                    {product.oldPrice}
+                    ${product.oldPrice}
                   </span>
                 )}
               </div>

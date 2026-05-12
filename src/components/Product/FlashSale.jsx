@@ -2,10 +2,12 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import ProductCard from './ProductCard';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const FlashSaleSection = () => {
   // Access the products from Redux store
   const allProducts = useSelector((state) => state.products.allProducts);
+  const navigate = useNavigate();
   
   // Filter for Flash Sale items
   const flashSaleItems = allProducts.filter(item => item.isFlashSale);
@@ -41,7 +43,10 @@ const FlashSaleSection = () => {
       </div>
 
       <div className="flex justify-center">
-        <button className="bg-[#DB4444] text-white px-8 sm:px-10 md:px-12 py-2.5 sm:py-3 md:py-4 rounded-md font-medium hover:bg-red-600 transition-colors text-sm sm:text-base active:bg-red-700">
+        <button 
+          onClick={() => navigate('/shop')}
+          className="bg-[#DB4444] text-white px-8 sm:px-10 md:px-12 py-2.5 sm:py-3 md:py-4 rounded-md font-medium hover:bg-red-600 transition-colors text-sm sm:text-base active:bg-red-700"
+        >
           View All Products
         </button>
       </div>

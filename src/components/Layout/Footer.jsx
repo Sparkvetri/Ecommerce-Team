@@ -2,7 +2,7 @@ const Footer = () => {
   return (
     <footer className="bg-black text-white">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 py-8 sm:py-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 sm:gap-8 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mb-8">
           
           {/* Column 1 - Company */}
           <div className="col-span-1">
@@ -35,7 +35,7 @@ const Footer = () => {
           </div>
 
           {/* Column 4 - Follow */}
-          <div className="col-span-1 sm:col-span-2 md:col-span-1">
+          <div className="col-span-1">
             <h4 className="font-bold text-base sm:text-lg mb-4">Follow Us</h4>
             <div className="flex gap-4 text-lg">
               <a href="#" className="hover:text-gray-300 transition">👍</a>

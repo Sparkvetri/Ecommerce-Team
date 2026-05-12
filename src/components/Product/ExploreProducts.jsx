@@ -1,42 +1,13 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import ProductCard from './ProductCard';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const ExploreProducts = () => {
-  const products = [
-  { 
-    id: 1, 
-    name: "Breed Dry Dog Food", 
-    price: 100, 
-    rating: 3, 
-    reviews: 35, 
-    image: "https://images.unsplash.com/photo-1589924691995-400dc9ecc119?q=80&w=500&auto=format&fit=crop" 
-  },
-  { 
-    id: 2, 
-    name: "CANON EOS DSLR Camera", 
-    price: 360, 
-    rating: 4, 
-    reviews: 95, 
-    image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=500&auto=format&fit=crop" 
-  },
-  { 
-    id: 3, 
-    name: "ASUS FHD Gaming Laptop", 
-    price: 700, 
-    rating: 5, 
-    reviews: 325, 
-    image: "https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?q=80&w=500&auto=format&fit=crop" 
-  },
-  { 
-    id: 4, 
-    name: "Curology Product Set", 
-    price: 500, 
-    rating: 4, 
-    reviews: 145, 
-    image: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=500&auto=format&fit=crop" 
-  },
-];
+  const allProducts = useSelector((state) => state.products.allProducts);
+  const products = allProducts.slice(12, 20); // Get some products for explore section
+  const navigate = useNavigate();
 
   return (
     <section className="w-full py-6 sm:py-8 md:py-12 px-3 sm:px-4 md:px-10 max-w-7xl mx-auto">
@@ -70,7 +41,10 @@ const ExploreProducts = () => {
       </div>
 
       <div className="flex justify-center">
-        <button className="bg-red-500 text-white px-8 sm:px-10 md:px-12 py-2.5 sm:py-3 md:py-4 rounded-md font-medium hover:bg-red-600 transition-colors text-sm sm:text-base active:bg-red-700">
+        <button 
+          onClick={() => navigate('/shop')}
+          className="bg-red-500 text-white px-8 sm:px-10 md:px-12 py-2.5 sm:py-3 md:py-4 rounded-md font-medium hover:bg-red-600 transition-colors text-sm sm:text-base active:bg-red-700"
+        >
           View All Products
         </button>
       </div>
