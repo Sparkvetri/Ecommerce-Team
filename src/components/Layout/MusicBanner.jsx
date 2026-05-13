@@ -2,7 +2,7 @@ import React from "react";
 
 const MusicBanner = () => {
   return (
-    <div className="w-full bg-gray-200 flex items-center justify-center py-8 px-3 sm:px-6 md:min-h-screen md:py-12">
+    <div className="w-full bg-gray-200 dark:bg-gray-950 flex items-center justify-center py-8 px-3 sm:px-6 md:min-h-[600px] md:py-12 transition-colors duration-300">
       <div className="bg-black w-full max-w-6xl rounded-md overflow-hidden flex flex-col md:flex-row items-center justify-between px-4 sm:px-8 md:px-10 lg:px-12 py-8 sm:py-10 md:py-12 gap-6 md:gap-8 relative">
         
         {/* Left Content */}

@@ -1,12 +1,17 @@
 import React from 'react';
-import { Heart, Eye, Star } from 'lucide-react';
+import { Heart, Eye, Star, ShoppingBag } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCart } from '../../store/cartSlice';
+import { addToWishlist, removeFromWishlist } from '../../store/wishlistSlice';
 
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const wishlistItems = useSelector((state) => state.wishlist.items);
+  const isFavorite = wishlistItems.some(item => item.id === product.id);
 
-  // Logic to handle star rendering
   const renderStars = (rating) => {
     return [...Array(5)].map((_, i) => (
       <Star 
@@ -24,97 +29,131 @@ const ProductCard = ({ product }) => {
     navigate(`/product/${product.id}`);
   };
 
+  const handleWishlist = (e) => {
+    e.stopPropagation();
+    if (isFavorite) {
+      dispatch(removeFromWishlist(product.id));
+    } else {
+      dispatch(addToWishlist(product));
+    }
+  };
+
+  const handleAddToCart = (e) => {
+    e.stopPropagation();
+    dispatch(addToCart(product));
+  };
+
   return (
     <motion.div 
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
       onClick={handleCardClick}
-      className="group flex flex-col gap-2 sm:gap-3 relative w-full cursor-pointer"
+      className="group relative flex flex-col gap-4 bg-white dark:bg-gray-900 p-2 rounded-2xl transition-all duration-500 hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] cursor-pointer border border-transparent hover:border-gray-100 dark:hover:border-gray-800"
     >
       {/* --- TOP IMAGE SECTION --- */}
-      <div className="relative aspect-square bg-[#F5F5F5] rounded-md flex items-center justify-center p-4 sm:p-6 md:p-8 overflow-hidden">
+      <div className="relative aspect-[4/5] bg-[#F8F8F8] dark:bg-gray-800 rounded-xl flex items-center justify-center p-6 overflow-hidden">
         
-        {/* Badges (Discount or New) */}
-        <div className="absolute top-2 sm:top-3 left-2 sm:left-3 flex flex-col gap-1 sm:gap-2">
+        {/* Badges - Glassmorphism */}
+        <div className="absolute top-4 left-4 flex flex-col gap-2 z-20">
           {product.discount && (
-            <span className="bg-[#DB4444] text-white text-[10px] sm:text-[12px] px-2 sm:px-3 py-0.5 sm:py-1 rounded-sm font-medium">
+            <span className="backdrop-blur-md bg-red-600/90 text-white text-[10px] sm:text-[11px] px-3 py-1 rounded-full font-bold tracking-wider shadow-lg">
               {product.discount}
             </span>
           )}
           {product.isNew && (
-            <span className="bg-[#00FF66] text-white text-[10px] sm:text-[12px] px-2 sm:px-3 py-0.5 sm:py-1 rounded-sm font-medium">
+            <span className="backdrop-blur-md bg-emerald-500/90 text-white text-[10px] sm:text-[11px] px-3 py-1 rounded-full font-bold tracking-wider shadow-lg">
               NEW
             </span>
           )}
         </div>
         
-        {/* Quick Actions (Floating Icons) */}
-        <div className="absolute top-2 sm:top-3 right-2 sm:right-3 flex flex-col gap-1.5 sm:gap-2 z-10 opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300">
-          <button 
-            onClick={(e) => e.stopPropagation()}
-            className="bg-white p-1.5 sm:p-2 rounded-full hover:bg-[#DB4444] hover:text-white transition-all shadow-sm active:scale-95 sm:active:scale-100"
+        {/* Quick Actions */}
+        <div className="absolute top-4 right-4 flex flex-col gap-2 z-20 opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 transition-all duration-500">
+          <motion.button 
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={handleWishlist}
+            className={`w-10 h-10 rounded-full flex items-center justify-center transition-all shadow-xl border border-gray-100 dark:border-gray-700 ${
+              isFavorite ? 'bg-red-600 text-white border-red-600' : 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 hover:bg-red-600 hover:text-white'
+            }`}
           >
-            <Heart size={16} className="sm:w-5 sm:h-5" />
-          </button>
-          <button 
-            onClick={(e) => e.stopPropagation()}
-            className="bg-white p-1.5 sm:p-2 rounded-full hover:bg-[#DB4444] hover:text-white transition-all shadow-sm active:scale-95 sm:active:scale-100"
+            <Heart size={18} fill={isFavorite ? "currentColor" : "none"} />
+          </motion.button>
+          <motion.button 
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={(e) => { e.stopPropagation(); navigate(`/product/${product.id}`); }}
+            className="w-10 h-10 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center text-gray-800 dark:text-gray-200 hover:bg-red-600 hover:text-white transition-colors shadow-xl border border-gray-100 dark:border-gray-700"
           >
-            <Eye size={16} className="sm:w-5 sm:h-5" />
-          </button>
+            <Eye size={18} />
+          </motion.button>
         </div>
 
         {/* Product Image */}
-        <img 
-          src={product.image} 
-          alt={product.name} 
-          onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1560393464-5c69a73c5770?w=500'; }} // Fallback image if unsplash link breaks
-          className="object-cover w-full h-full mix-blend-multiply group-hover:scale-110 transition-transform duration-500 rounded-md" 
-        />
+        <div className="relative w-full h-full flex items-center justify-center">
+          <motion.img 
+            src={product.image} 
+            alt={product.name} 
+            onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1560393464-5c69a73c5770?w=500'; }}
+            className="object-contain w-full h-full mix-blend-normal dark:mix-blend-normal group-hover:scale-110 transition-transform duration-700" 
+          />
+          
+          {/* Decorative Shadow */}
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-1/2 h-4 bg-black/5 blur-xl rounded-full scale-0 group-hover:scale-100 transition-transform duration-700" />
+        </div>
 
-        {/* Add to Cart - Slide Up Action / Mobile Touch */}
-        <button 
-          onClick={(e) => { e.stopPropagation(); /* Dispatch add to cart */ }}
-          className="absolute bottom-0 w-full bg-black text-white py-2 sm:py-2.5 translate-y-full sm:group-hover:translate-y-0 transition-transform duration-300 font-medium text-xs sm:text-sm active:bg-gray-800"
+        {/* Add to Cart Overlay */}
+        <motion.button 
+          whileTap={{ scale: 0.95 }}
+          onClick={handleAddToCart}
+          className="absolute inset-x-0 bottom-0 bg-black/90 backdrop-blur-md text-white py-4 opacity-0 group-hover:opacity-100 translate-y-full group-hover:translate-y-0 transition-all duration-500 flex items-center justify-center gap-3 font-bold text-xs uppercase tracking-[0.2em]"
         >
+          <ShoppingBag size={16} />
           Add To Cart
-        </button>
+        </motion.button>
       </div>
 
       {/* --- BOTTOM DETAILS SECTION --- */}
-      <div className="flex flex-col gap-1 sm:gap-1.5 pt-0.5 sm:pt-1">
-        <h3 className="font-bold text-xs sm:text-base text-black truncate group-hover:text-[#DB4444] transition-colors line-clamp-2 sm:line-clamp-1">
-          {product.name}
-        </h3>
+      <div className="px-3 pb-4 flex flex-col gap-2">
+        <div className="flex justify-between items-start gap-2">
+          <h3 className="font-bold text-gray-900 dark:text-gray-100 group-hover:text-red-600 transition-colors duration-300 leading-snug">
+            {product.name}
+          </h3>
+        </div>
         
-        <div className="flex gap-2 sm:gap-3 items-center flex-wrap">
-          <span className="text-[#DB4444] font-semibold text-sm sm:text-base">${product.price}</span>
+        <div className="flex items-center gap-3">
+          <span className="text-xl font-bold text-gray-900 dark:text-white">${product.price}</span>
           {product.oldPrice && (
-            <span className="text-gray-400 line-through text-xs sm:text-sm font-medium">
+            <span className="text-gray-400 dark:text-gray-500 line-through text-sm font-medium">
               ${product.oldPrice}
             </span>
           )}
         </div>
 
-        <div className="flex items-center gap-1 sm:gap-2">
+        <div className="flex items-center gap-2 mt-1">
           <div className="flex gap-0.5">
             {renderStars(product.rating)}
           </div>
-          <span className="text-gray-500 text-xs sm:text-sm font-semibold">
+          <span className="text-gray-400 text-xs font-bold tracking-wider">
             ({product.reviews})
           </span>
         </div>
 
-        {/* Color Variants (If exists) */}
         {product.colors && (
-          <div className="flex gap-1.5 sm:gap-2 mt-1">
+          <div className="flex gap-2 mt-3 pt-3 border-t border-gray-50">
             {product.colors.map((color, index) => (
-              <div 
+              <motion.div 
                 key={index} 
-                className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full border-[1.5px] cursor-pointer hover:scale-110 transition-transform ${index === 0 ? 'border-black' : 'border-transparent shadow-sm'}`}
-                style={{ backgroundColor: color }}
-              />
+                whileHover={{ scale: 1.2 }}
+                className={`w-4 h-4 rounded-full border-2 p-0.5 transition-all ${index === 0 ? 'border-gray-900' : 'border-transparent'}`}
+              >
+                <div 
+                  className="w-full h-full rounded-full shadow-inner"
+                  style={{ backgroundColor: color }}
+                />
+              </motion.div>
             ))}
           </div>
         )}

@@ -6,12 +6,22 @@ import ProductCard from '../components/Product/ProductCard';
 const Shop = () => {
   const dispatch = useDispatch();
   const filteredProducts = useSelector((state) => state.products.filteredProducts);
-  const [activeCategory, setActiveCategory] = useState('All');
+  const activeCategory = useSelector((state) => state.products.currentCategory);
 
-  const categories = ['All', 'Phones', 'Computers', 'Gaming', 'HeadPhones', 'SmartWatch', 'Camera', 'Home'];
+  const categories = [
+    'All', 
+    'Woman’s Fashion', 
+    'Men’s Fashion', 
+    'Electronics', 
+    'Home & Lifestyle', 
+    'Medicine', 
+    'Sports & Outdoor', 
+    'Baby’s & Toys', 
+    'Groceries & Pets', 
+    'Health & Beauty'
+  ];
 
   const handleCategoryClick = (category) => {
-    setActiveCategory(category);
     dispatch(filterByCategory(category));
   };
 
