@@ -6,6 +6,13 @@
   --font-serif: "Playfair Display", serif;
 }
 
+@variant dark (&:where(.dark, .dark *));
+
 body {
   font-family: "Outfit", sans-serif;
+  @apply bg-white text-gray-900 transition-colors duration-300;
+}
+
+.dark body {
+  @apply bg-gray-950 text-gray-100;
 }

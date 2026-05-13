@@ -4,13 +4,15 @@ import { products } from '../data/products';
 const productSlice = createSlice({
   name: 'products',
   initialState: {
-    allProducts: products, // Initial data from file
+    allProducts: products,
     flashSales: products.filter(p => p.isFlashSale),
-    filteredProducts: products
+    filteredProducts: products,
+    currentCategory: 'All'
   },
   reducers: {
     filterByCategory: (state, action) => {
       const category = action.payload;
+      state.currentCategory = category;
       if (category === 'All') {
         state.filteredProducts = state.allProducts;
       } else {

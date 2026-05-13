@@ -1,52 +1,82 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useSelector } from 'react-redux';
 import ProductCard from './ProductCard';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 const ExploreProducts = () => {
   const allProducts = useSelector((state) => state.products.allProducts);
-  const products = allProducts.slice(12, 20); // Get some products for explore section
+  const products = allProducts.slice(15, 35); // Show a good variety
   const navigate = useNavigate();
+  const scrollRef = useRef(null);
+
+  const scroll = (direction) => {
+    if (scrollRef.current) {
+      const { scrollLeft, clientWidth } = scrollRef.current;
+      const scrollTo = direction === 'left' 
+        ? scrollLeft - clientWidth * 0.8 
+        : scrollLeft + clientWidth * 0.8;
+      scrollRef.current.scrollTo({ left: scrollTo, behavior: 'smooth' });
+    }
+  };
 
   return (
-    <section className="w-full py-6 sm:py-8 md:py-12 px-3 sm:px-4 md:px-10 max-w-7xl mx-auto">
+    <section className="w-full py-12 px-4 sm:px-6 lg:px-10 max-w-7xl mx-auto">
       
       {/* SECTION HEADER */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 sm:mb-8 md:mb-10 gap-4">
+      <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-8">
         <div>
-          <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-2">
-            <div className="w-3 h-8 sm:w-4 sm:h-10 bg-red-500 rounded-sm"></div>
-            <span className="text-red-500 font-bold text-xs sm:text-sm">Our Products</span>
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-4 h-10 bg-red-600 rounded-sm shadow-lg shadow-red-200"></div>
+            <span className="text-red-600 font-bold text-sm tracking-[0.2em] uppercase">Our Collection</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight">Explore Our Products</h2>
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-gray-900 font-serif">Explore Our Products</h2>
         </div>
         
         {/* Navigation Arrows */}
-        <div className="flex gap-2 w-full sm:w-auto">
-          <button className="flex-1 sm:flex-none p-1.5 sm:p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors active:bg-gray-300">
-            <ArrowLeft size={18} className="sm:w-5 sm:h-5" />
-          </button>
-          <button className="flex-1 sm:flex-none p-1.5 sm:p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors active:bg-gray-300">
-            <ArrowRight size={18} className="sm:w-5 sm:h-5" />
-          </button>
+        <div className="flex gap-3">
+          <motion.button 
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => scroll('left')}
+            className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg border border-gray-100 text-gray-800 hover:bg-red-600 hover:text-white transition-all"
+          >
+            <ArrowLeft size={20} />
+          </motion.button>
+          <motion.button 
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => scroll('right')}
+            className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg border border-gray-100 text-gray-800 hover:bg-red-600 hover:text-white transition-all"
+          >
+            <ArrowRight size={20} />
+          </motion.button>
         </div>
       </div>
 
-      {/* THE GRID */}
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8 mb-8 md:mb-12">
+      {/* Horizontal Slider */}
+      <div 
+        ref={scrollRef}
+        className="flex flex-nowrap gap-4 md:gap-6 overflow-x-auto pb-10 no-scrollbar scroll-smooth snap-x snap-mandatory"
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+      >
         {products.map(item => (
-          <ProductCard key={item.id} product={item} />
+          <div key={item.id} className="min-w-[75%] sm:min-w-[45%] md:min-w-[31%] lg:min-w-[calc(25%-18px)] snap-start">
+            <ProductCard product={item} />
+          </div>
         ))}
       </div>
 
       <div className="flex justify-center">
-        <button 
+        <motion.button 
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
           onClick={() => navigate('/shop')}
-          className="bg-red-500 text-white px-8 sm:px-10 md:px-12 py-2.5 sm:py-3 md:py-4 rounded-md font-medium hover:bg-red-600 transition-colors text-sm sm:text-base active:bg-red-700"
+          className="bg-red-600 text-white px-14 py-4 rounded-full font-bold hover:bg-red-700 transition-all shadow-2xl shadow-red-100 tracking-widest text-sm uppercase"
         >
-          View All Products
-        </button>
+          Explore All Products
+        </motion.button>
       </div>
     </section>
   );

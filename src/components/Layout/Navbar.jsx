@@ -1,177 +1,242 @@
-import { useState } from 'react';
-import { Menu, X, Search, Heart, ShoppingCart, ChevronDown } from 'lucide-react';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { searchProducts } from '../../store/productSliceApi';
+import React, { useState } from 'react';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
+import { 
+  Search, 
+  ShoppingCart, 
+  Heart, 
+  User, 
+  Menu, 
+  X, 
+  LogOut, 
+  UserCircle, 
+  Settings, 
+  ShoppingBag,
+  ChevronDown,
+  LayoutDashboard
+} from 'lucide-react';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../../store/authSlice';
 import { motion, AnimatePresence } from 'framer-motion';
+import ThemeToggle from '../Common/ThemeToggle';
 
-export default function Navbar() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+const Navbar = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { isAuthenticated, user, role } = useSelector((state) => state.auth || { isAuthenticated: false, user: null, role: null });
+  const cartQuantity = useSelector((state) => state.cart.totalQuantity);
+  const wishlistCount = useSelector((state) => state.wishlist.items.length);
 
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'Shop', path: '/shop' },
-    { name: 'Contact', path: '/contact' },
     { name: 'About', path: '/about' },
+    { name: 'Contact', path: '/contact' },
   ];
 
-  const handleSearch = (e) => {
-    dispatch(searchProducts(e.target.value));
-    if(e.target.value.trim() !== '') {
-       navigate('/shop');
-    }
+  const handleLogout = () => {
+    dispatch(logout());
+    setIsProfileOpen(false);
+    navigate('/login');
   };
 
   return (
-    <>
-      {/* Top Header - Hidden on very small screens, responsive on mobile */}
-      <div className="hidden sm:flex bg-black text-white h-10 sm:h-12 items-center justify-center relative text-xs sm:text-sm px-2">
-        <div className="flex items-center justify-center gap-2 sm:gap-3 max-w-7xl w-full mx-auto px-2">
-          <p className="font-light text-center truncate">
-            Summer Sale For All Swim Suits And Free Express Delivery - OFF 50%!
-          </p>
-          <button className="font-semibold underline text-xs sm:text-sm whitespace-nowrap hover:text-gray-300 transition-colors">
-            Shop Now
-          </button>
-        </div>
+    <nav className="sticky top-0 z-50 w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-b border-gray-100 dark:border-gray-800 shadow-sm transition-colors duration-300">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-20">
+          
+          {/* Logo - Premium Gradient */}
+          <Link to="/" className="flex items-center group">
+            <motion.div 
+              whileHover={{ scale: 1.05 }}
+              className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-red-600 to-red-400 bg-clip-text text-transparent font-serif tracking-tight"
+            >
+              Exclusive
+            </motion.div>
+          </Link>
 
-        <div className="hidden lg:flex absolute right-4 sm:right-20 items-center gap-1 cursor-pointer hover:text-gray-300 transition-colors">
-          <span>English</span>
-          <ChevronDown size={14} />
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-10">
+            {navLinks.map((link) => (
+              <NavLink
+                key={link.name}
+                to={link.path}
+                className={({ isActive }) => `
+                  relative py-2 text-sm font-bold tracking-widest uppercase transition-all duration-300
+                  ${isActive ? 'text-red-600' : 'text-gray-500 hover:text-black'}
+                `}
+              >
+                {({ isActive }) => (
+                  <>
+                    {link.name}
+                    {isActive && (
+                      <motion.div 
+                        layoutId="nav-underline"
+                        className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600"
+                      />
+                    )}
+                  </>
+                )}
+              </NavLink>
+            ))}
+          </div>
+
+          {/* Search & Actions */}
+          <div className="flex items-center gap-4 md:gap-6">
+            <div className="hidden lg:flex items-center bg-gray-100 rounded-full px-4 py-2 group focus-within:bg-white focus-within:ring-2 focus-within:ring-red-100 transition-all">
+              <input 
+                type="text" 
+                placeholder="Search products..." 
+                className="bg-transparent border-none outline-none text-sm w-48 font-medium"
+              />
+              <Search size={18} className="text-gray-400 group-focus-within:text-red-500 transition-colors" />
+            </div>
+
+            <div className="flex items-center gap-2 md:gap-4">
+              {/* Theme Toggle */}
+              <ThemeToggle />
+
+              {/* Wishlist Icon */}
+              <Link to="/wishlist" className="relative p-2 text-gray-600 dark:text-gray-400 hover:text-red-600 transition-colors group">
+                <Heart size={24} className="group-hover:scale-110 transition-transform" />
+                {wishlistCount > 0 && (
+                  <span className="absolute top-1 right-1 bg-red-600 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-lg border-2 border-white dark:border-gray-900 tabular-nums">
+                    {wishlistCount}
+                  </span>
+                )}
+              </Link>
+
+              {/* Cart Icon */}
+              <Link to="/cart" className="relative p-2 text-gray-600 dark:text-gray-400 hover:text-red-600 transition-colors group">
+                <ShoppingCart size={24} className="group-hover:scale-110 transition-transform" />
+                {cartQuantity > 0 && (
+                  <span className="absolute top-1 right-1 bg-black dark:bg-red-600 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-lg border-2 border-white dark:border-gray-900 tabular-nums">
+                    {cartQuantity}
+                  </span>
+                )}
+              </Link>
+
+              {/* Auth / Profile */}
+              {isAuthenticated ? (
+                <div className="relative">
+                  <button 
+                    onClick={() => setIsProfileOpen(!isProfileOpen)}
+                    className="flex items-center gap-2 p-1 rounded-full border-2 border-transparent hover:border-red-100 transition-all"
+                  >
+                    <div className="w-9 h-9 bg-red-50 rounded-full flex items-center justify-center text-red-600">
+                      <User size={20} />
+                    </div>
+                    <ChevronDown size={14} className={`text-gray-400 transition-transform ${isProfileOpen ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  <AnimatePresence>
+                    {isProfileOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                        className="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden py-2"
+                      >
+                        <div className="px-4 py-3 border-b border-gray-50 dark:border-gray-800">
+                          <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Account</p>
+                          <p className="text-sm font-bold text-gray-900 dark:text-white truncate">{user?.name || 'User'}</p>
+                        </div>
+                        {role === 'admin' && (
+                          <button 
+                            onClick={() => { navigate('/admin'); setIsProfileOpen(false); }}
+                            className="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-600 bg-red-50/50 hover:bg-red-50 transition-colors font-bold"
+                          >
+                            <LayoutDashboard size={18} /> Admin Dashboard
+                          </button>
+                        )}
+                        <button className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
+                          <UserCircle size={18} /> Manage My Account
+                        </button>
+                        <button className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
+                          <ShoppingBag size={18} /> My Orders
+                        </button>
+                        <button className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
+                          <Settings size={18} /> Settings
+                        </button>
+                        <div className="border-t border-gray-50 mt-2">
+                          <button 
+                            onClick={handleLogout}
+                            className="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                          >
+                            <LogOut size={18} /> Logout
+                          </button>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              ) : (
+                <Link 
+                  to="/login"
+                  className="bg-red-600 text-white px-6 py-2.5 rounded-full text-sm font-bold hover:bg-red-700 transition-all shadow-lg shadow-red-100 hidden sm:block"
+                >
+                  Login
+                </Link>
+              )}
+
+              {/* Mobile Menu Button */}
+              <button 
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="md:hidden p-2 text-gray-600"
+              >
+                {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Main Navbar */}
-      <header className="border-b border-gray-200 sticky top-0 z-50 bg-white/80 backdrop-blur-md shadow-sm">
-        <div className="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6 py-3 sm:h-20 sm:py-0">
-          
-          {/* Logo */}
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <NavLink 
-              to="/" 
-              className="text-2xl sm:text-3xl font-bold tracking-wider whitespace-nowrap flex-shrink-0 font-serif bg-gradient-to-r from-red-600 to-rose-400 bg-clip-text text-transparent"
-            >
-              Shopzy
-            </NavLink>
-          </motion.div>
-
-          {/* Center Nav on desktop */}
-          <nav className="hidden md:flex items-center justify-center flex-1">
-            <ul className="flex items-center gap-8 lg:gap-12 text-sm font-medium">
-              {navLinks.map((link, i) => (
-                <motion.li 
+      {/* Mobile Navigation */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="md:hidden bg-white border-t border-gray-100 overflow-hidden"
+          >
+            <div className="px-4 py-6 flex flex-col gap-4">
+              {navLinks.map((link) => (
+                <Link
                   key={link.name}
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
+                  to={link.path}
+                  onClick={() => setIsMenuOpen(false)}
+                  className="text-lg font-bold text-gray-600 hover:text-red-600 transition-colors"
                 >
-                  <NavLink
-                    to={link.path}
-                    className={({ isActive }) =>
-                      `relative py-2 transition-colors hover:text-red-600 ${
-                        isActive ? 'text-red-600' : 'text-gray-800'
-                      } after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-red-600 after:transition-all after:duration-300 hover:after:w-full ${isActive ? 'after:w-full' : ''}`
-                    }
-                  >
-                    {link.name}
-                  </NavLink>
-                </motion.li>
+                  {link.name}
+                </Link>
               ))}
-            </ul>
-          </nav>
-
-          {/* Search + Icons */}
-          <div className="flex items-center gap-4 lg:gap-6 text-gray-800">
-            
-            {/* Search Box - Full on lg, icon on mobile */}
-            <div className="hidden lg:flex items-center bg-gray-100 px-4 py-2 rounded-full w-48 lg:w-72 focus-within:ring-2 focus-within:ring-red-200 focus-within:bg-white transition-all shadow-inner">
-              <input
-                type="text"
-                placeholder="What are you looking for?"
-                onChange={handleSearch}
-                className="bg-transparent outline-none text-sm flex-1 placeholder-gray-500"
-              />
-              <motion.button whileHover={{ scale: 1.1 }} className="text-gray-500 hover:text-red-600 transition-colors" aria-label="Search">
-                <Search size={18} />
-              </motion.button>
+              {role === 'admin' && (
+                <Link
+                  to="/admin"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="text-lg font-bold text-red-600 bg-red-50 px-4 py-3 rounded-xl flex items-center gap-3"
+                >
+                  <LayoutDashboard size={20} /> Admin Dashboard
+                </Link>
+              )}
+              {!isAuthenticated && (
+                <Link 
+                  to="/login" 
+                  onClick={() => setIsMenuOpen(false)}
+                  className="bg-red-600 text-white py-4 rounded-xl text-center font-bold"
+                >
+                  Login
+                </Link>
+              )}
             </div>
-
-            {/* Search Icon - Mobile */}
-            <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className="lg:hidden hover:text-red-600 transition-colors" aria-label="Search" onClick={() => setMobileMenuOpen(true)}>
-              <Search size={20} />
-            </motion.button>
-
-            {/* Wishlist */}
-            <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className="hover:text-red-600 transition-colors relative" aria-label="Wishlist">
-              <Heart size={22} />
-            </motion.button>
-
-            {/* Cart */}
-            <NavLink to="/cart">
-              <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className="hover:text-red-600 transition-colors relative" aria-label="Cart">
-                <ShoppingCart size={22} />
-              </motion.div>
-            </NavLink>
-
-            {/* Mobile Menu Button */}
-            <motion.button 
-              whileTap={{ scale: 0.9 }}
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden ml-1 p-1 hover:bg-red-50 text-gray-800 hover:text-red-600 rounded-md transition-colors"
-              aria-label="Toggle menu"
-            >
-              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </motion.button>
-          </div>
-        </div>
-
-        {/* Mobile Menu */}
-        <AnimatePresence>
-          {mobileMenuOpen && (
-            <motion.nav 
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              className="md:hidden border-t border-gray-200 bg-white overflow-hidden"
-            >
-              <ul className="flex flex-col text-sm font-medium py-2">
-                {navLinks.map((link) => (
-                  <li key={link.name}>
-                    <NavLink
-                      to={link.path}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className={({ isActive }) =>
-                        `block pl-6 py-3 pr-4 hover:bg-red-50 hover:text-red-600 transition-colors ${
-                          isActive ? 'border-l-4 border-red-600 bg-red-50 text-red-600' : 'border-l-4 border-transparent text-gray-700'
-                        }`
-                      }
-                    >
-                      {link.name}
-                    </NavLink>
-                  </li>
-                ))}
-              </ul>
-
-              {/* Mobile Search */}
-              <div className="border-t border-gray-200 p-4 bg-gray-50">
-                <div className="flex items-center bg-white border border-gray-300 px-4 py-2 rounded-full focus-within:border-red-400 focus-within:ring-2 focus-within:ring-red-100 transition-all">
-                  <input
-                    type="text"
-                    placeholder="Search products..."
-                    onChange={handleSearch}
-                    className="bg-transparent outline-none text-sm flex-1"
-                  />
-                  <button className="text-gray-500 hover:text-red-600" aria-label="Search">
-                    <Search size={18} />
-                  </button>
-                </div>
-              </div>
-            </motion.nav>
-          )}
-        </AnimatePresence>
-      </header>
-    </>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </nav>
   );
-}
+};
+
+export default Navbar;
