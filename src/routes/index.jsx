@@ -11,7 +11,11 @@ import Wishlist from '../pages/Wishlist';
 import Checkout from '../pages/Checkout';
 import About from '../pages/About';
 import Contact from '../pages/Contact';
-import AdminDashboard from '../pages/Admin/AdminDashboard';
+import AdminLayout from '../pages/Admin/AdminLayout';
+import AdminDashboard from '../pages/Admin/Dashboard';
+import ProductList from '../pages/Admin/ProductList';
+import UserList from '../pages/Admin/UserList';
+import OrderList from '../pages/Admin/OrderList';
 
 const router = createBrowserRouter([
   {
@@ -29,9 +33,19 @@ const router = createBrowserRouter([
       { path: 'checkout',     element: <Checkout /> },
       { path: 'about',        element: <About /> },
       { path: 'contact',      element: <Contact /> },
-      { path: 'admin',        element: <AdminDashboard /> },
     ],
   },
+  {
+    path: '/admin',
+    element: <AdminLayout />,
+    children: [
+      { index: true, element: <AdminDashboard /> },
+      { path: 'products', element: <ProductList /> },
+      { path: 'orders', element: <OrderList /> },
+      { path: 'users', element: <UserList /> },
+      { path: 'settings', element: <div className="text-gray-500">Admin Settings (Coming Soon)</div> },
+    ]
+  }
 ]);
 
 export default router;

@@ -10,7 +10,8 @@ const ProductCard = ({ product }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const wishlistItems = useSelector((state) => state.wishlist.items);
-  const isFavorite = wishlistItems.some(item => item.id === product.id);
+  const productId = product._id || product.id;
+  const isFavorite = wishlistItems.some(item => (item._id || item.id) === productId);
 
   const renderStars = (rating) => {
     return [...Array(5)].map((_, i) => (
@@ -26,13 +27,13 @@ const ProductCard = ({ product }) => {
   };
 
   const handleCardClick = () => {
-    navigate(`/product/${product.id}`);
+    navigate(`/product/${productId}`);
   };
 
   const handleWishlist = (e) => {
     e.stopPropagation();
     if (isFavorite) {
-      dispatch(removeFromWishlist(product.id));
+      dispatch(removeFromWishlist(productId));
     } else {
       dispatch(addToWishlist(product));
     }
@@ -62,7 +63,7 @@ const ProductCard = ({ product }) => {
               {product.discount}
             </span>
           )}
-          {product.isNew && (
+          {product.isNewItem && (
             <span className="backdrop-blur-md bg-emerald-500/90 text-white text-[10px] sm:text-[11px] px-3 py-1 rounded-full font-bold tracking-wider shadow-lg">
               NEW
             </span>
@@ -84,7 +85,7 @@ const ProductCard = ({ product }) => {
           <motion.button 
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
-            onClick={(e) => { e.stopPropagation(); navigate(`/product/${product.id}`); }}
+            onClick={(e) => { e.stopPropagation(); navigate(`/product/${productId}`); }}
             className="w-10 h-10 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center text-gray-800 dark:text-gray-200 hover:bg-red-600 hover:text-white transition-colors shadow-xl border border-gray-100 dark:border-gray-700"
           >
             <Eye size={18} />
@@ -118,7 +119,7 @@ const ProductCard = ({ product }) => {
       {/* --- BOTTOM DETAILS SECTION --- */}
       <div className="px-3 pb-4 flex flex-col gap-2">
         <div className="flex justify-between items-start gap-2">
-          <h3 className="font-bold text-gray-900 dark:text-gray-100 group-hover:text-red-600 transition-colors duration-300 leading-snug">
+          <h3 className="font-bold text-gray-900 dark:text-gray-100 group-hover:text-red-600 transition-colors duration-300 leading-snug truncate">
             {product.name}
           </h3>
         </div>
@@ -140,23 +141,6 @@ const ProductCard = ({ product }) => {
             ({product.reviews})
           </span>
         </div>
-
-        {product.colors && (
-          <div className="flex gap-2 mt-3 pt-3 border-t border-gray-50">
-            {product.colors.map((color, index) => (
-              <motion.div 
-                key={index} 
-                whileHover={{ scale: 1.2 }}
-                className={`w-4 h-4 rounded-full border-2 p-0.5 transition-all ${index === 0 ? 'border-gray-900' : 'border-transparent'}`}
-              >
-                <div 
-                  className="w-full h-full rounded-full shadow-inner"
-                  style={{ backgroundColor: color }}
-                />
-              </motion.div>
-            ))}
-          </div>
-        )}
       </div>
     </motion.div>
   );

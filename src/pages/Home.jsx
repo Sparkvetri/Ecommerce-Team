@@ -21,7 +21,7 @@ const SectionWrapper = ({ children, className = "" }) => (
 
 const Home = () => {
   return (
-    <main className="overflow-x-hidden bg-white">
+    <main className="overflow-x-hidden bg-white dark:bg-gray-950 transition-colors duration-300">
       {/* Hero Section */}
       <section className="mb-8 md:mb-16">
         <Banner />
@@ -38,7 +38,7 @@ const Home = () => {
       </SectionWrapper>
 
       {/* Best Selling Section */}
-      <SectionWrapper className="mb-12 md:mb-20 bg-gray-50/50">
+      <SectionWrapper className="mb-12 md:mb-20 bg-gray-50/50 dark:bg-gray-900/30">
         <Selling />
       </SectionWrapper>
 
