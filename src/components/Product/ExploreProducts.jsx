@@ -22,7 +22,7 @@ const ExploreProducts = () => {
   };
 
   return (
-    <section className="w-full py-12 px-4 sm:px-6 lg:px-10 max-w-7xl mx-auto">
+    <section className="w-full py-12 px-4 sm:px-6 lg:px-10 max-w-7xl mx-auto dark:bg-gray-950">
       
       {/* SECTION HEADER */}
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-8">
@@ -31,7 +31,7 @@ const ExploreProducts = () => {
             <div className="w-4 h-10 bg-red-600 rounded-sm shadow-lg shadow-red-200"></div>
             <span className="text-red-600 font-bold text-sm tracking-[0.2em] uppercase">Our Collection</span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-gray-900 font-serif">Explore Our Products</h2>
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-gray-900 dark:text-white font-serif">Explore Our Products</h2>
         </div>
         
         {/* Navigation Arrows */}
@@ -40,7 +40,7 @@ const ExploreProducts = () => {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => scroll('left')}
-            className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg border border-gray-100 text-gray-800 hover:bg-red-600 hover:text-white transition-all"
+            className="w-12 h-12 bg-white dark:bg-gray-900 rounded-full flex items-center justify-center shadow-lg border border-gray-100 dark:border-gray-800 text-gray-800 dark:text-gray-200 hover:bg-red-600 hover:text-white transition-all"
           >
             <ArrowLeft size={20} />
           </motion.button>
@@ -48,7 +48,7 @@ const ExploreProducts = () => {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => scroll('right')}
-            className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg border border-gray-100 text-gray-800 hover:bg-red-600 hover:text-white transition-all"
+            className="w-12 h-12 bg-white dark:bg-gray-900 rounded-full flex items-center justify-center shadow-lg border border-gray-100 dark:border-gray-800 text-gray-800 dark:text-gray-200 hover:bg-red-600 hover:text-white transition-all"
           >
             <ArrowRight size={20} />
           </motion.button>
@@ -62,7 +62,7 @@ const ExploreProducts = () => {
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {products.map(item => (
-          <div key={item.id} className="min-w-[75%] sm:min-w-[45%] md:min-w-[31%] lg:min-w-[calc(25%-18px)] snap-start">
+          <div key={item._id || item.id} className="min-w-[75%] sm:min-w-[45%] md:min-w-[31%] lg:min-w-[calc(25%-18px)] snap-start">
             <ProductCard product={item} />
           </div>
         ))}
@@ -73,7 +73,7 @@ const ExploreProducts = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => navigate('/shop')}
-          className="bg-red-600 text-white px-14 py-4 rounded-full font-bold hover:bg-red-700 transition-all shadow-2xl shadow-red-100 tracking-widest text-sm uppercase"
+          className="bg-red-600 text-white px-14 py-4 rounded-full font-bold hover:bg-red-700 transition-all shadow-2xl shadow-red-100 dark:shadow-none tracking-widest text-sm uppercase"
         >
           Explore All Products
         </motion.button>

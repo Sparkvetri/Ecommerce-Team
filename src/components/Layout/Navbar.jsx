@@ -22,10 +22,12 @@ import ThemeToggle from '../Common/ThemeToggle';
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [keyword, setKeyword] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { isAuthenticated, user, role } = useSelector((state) => state.auth || { isAuthenticated: false, user: null, role: null });
+  const { isAuthenticated, user } = useSelector((state) => state.auth || { isAuthenticated: false, user: null });
+  const isAdmin = user?.isAdmin;
   const cartQuantity = useSelector((state) => state.cart.totalQuantity);
   const wishlistCount = useSelector((state) => state.wishlist.items.length);
 
@@ -40,6 +42,15 @@ const Navbar = () => {
     dispatch(logout());
     setIsProfileOpen(false);
     navigate('/login');
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (keyword.trim()) {
+      navigate(`/shop?keyword=${keyword}`);
+    } else {
+      navigate('/shop');
+    }
   };
 
   return (
@@ -85,14 +96,18 @@ const Navbar = () => {
 
           {/* Search & Actions */}
           <div className="flex items-center gap-4 md:gap-6">
-            <div className="hidden lg:flex items-center bg-gray-100 rounded-full px-4 py-2 group focus-within:bg-white focus-within:ring-2 focus-within:ring-red-100 transition-all">
+            <form onSubmit={handleSearch} className="hidden lg:flex items-center bg-gray-100 dark:bg-gray-800 rounded-full px-4 py-2 group focus-within:bg-white dark:focus-within:bg-gray-700 focus-within:ring-2 focus-within:ring-red-100 dark:focus-within:ring-red-900/30 transition-all">
               <input 
                 type="text" 
                 placeholder="Search products..." 
-                className="bg-transparent border-none outline-none text-sm w-48 font-medium"
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)}
+                className="bg-transparent border-none outline-none text-sm w-48 font-medium text-gray-900 dark:text-white"
               />
-              <Search size={18} className="text-gray-400 group-focus-within:text-red-500 transition-colors" />
-            </div>
+              <button type="submit">
+                <Search size={18} className="text-gray-400 group-focus-within:text-red-500 transition-colors" />
+              </button>
+            </form>
 
             <div className="flex items-center gap-2 md:gap-4">
               {/* Theme Toggle */}
@@ -137,13 +152,13 @@ const Navbar = () => {
                         initial={{ opacity: 0, y: 10, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                        className="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden py-2"
+                        className="absolute right-0 mt-3 w-56 bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-800 overflow-hidden py-2"
                       >
                         <div className="px-4 py-3 border-b border-gray-50 dark:border-gray-800">
                           <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Account</p>
                           <p className="text-sm font-bold text-gray-900 dark:text-white truncate">{user?.name || 'User'}</p>
                         </div>
-                        {role === 'admin' && (
+                        {isAdmin && (
                           <button 
                             onClick={() => { navigate('/admin'); setIsProfileOpen(false); }}
                             className="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-600 bg-red-50/50 hover:bg-red-50 transition-colors font-bold"
@@ -151,13 +166,13 @@ const Navbar = () => {
                             <LayoutDashboard size={18} /> Admin Dashboard
                           </button>
                         )}
-                        <button className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
+                        <button onClick={() => { navigate('/profile'); setIsProfileOpen(false); }} className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                           <UserCircle size={18} /> Manage My Account
                         </button>
-                        <button className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
+                        <button onClick={() => { navigate('/profile#orders'); setIsProfileOpen(false); }} className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                           <ShoppingBag size={18} /> My Orders
                         </button>
-                        <button className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
+                        <button className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                           <Settings size={18} /> Settings
                         </button>
                         <div className="border-t border-gray-50 mt-2">
@@ -213,7 +228,7 @@ const Navbar = () => {
                   {link.name}
                 </Link>
               ))}
-              {role === 'admin' && (
+              {isAdmin && (
                 <Link
                   to="/admin"
                   onClick={() => setIsMenuOpen(false)}
